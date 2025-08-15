@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Extracurriculars • Activities</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Choices.js CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a class="logo" href="index.html">Extracurriculars</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="guide.html">Guide</a></li>
+      <li><a class="active" href="activities.html">Activities</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <h1>Find Activities</h1>
+
+    <input id="searchBar" class="search-bar" type="text" placeholder="Search activities, tags, locations…" aria-label="Search activities" />
+
+    <div class="filters">
+      <label for="ageFilter">Age:</label>
+      <select id="ageFilter" multiple></select>
+
+      <label for="typeFilter">Type:</label>
+      <select id="typeFilter" multiple></select>
+
+      <label for="categoryFilter">Category:</label>
+      <select id="categoryFilter" multiple></select>
+
+      <button id="clearFilters" class="btn btn-secondary">Clear All</button>
+    </div>
+
+    <div id="activityGrid" class="activity-grid" role="list"></div>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Extracurriculars</p>
+  </footer>
+
+  <!-- JS libs -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <script src="activities.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
