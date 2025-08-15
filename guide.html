@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Extracurriculars • Guide</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a class="logo" href="index.html">Extracurriculars</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a class="active" href="guide.html">Guide</a></li>
+      <li><a href="activities.html">Activities</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <h1>Guide to Choosing Extracurriculars</h1>
+
+    <section class="card block">
+      <h2>1) Know Your Goals</h2>
+      <p>List your interests, strengths, and what you want to learn. Align activities with college/career goals.</p>
+    </section>
+
+    <section class="card block">
+      <h2>2) Pick a Mix</h2>
+      <p>Balance depth (one or two core activities) with breadth (supporting roles). Aim for 1–3 sustained commitments.</p>
+    </section>
+
+    <section class="card block">
+      <h2>3) Plan the Year</h2>
+      <ul class="nice-list">
+        <li>Mark deadlines (sign-ups, submissions, competitions).</li>
+        <li>Block weekly time; protect exam periods.</li>
+        <li>Track outcomes and reflect every term.</li>
+      </ul>
+    </section>
+
+    <section class="card block">
+      <h2>4) Show Impact</h2>
+      <p>Look for roles that create value: lead a team, mentor juniors, run events, publish results, or raise funds.</p>
+    </section>
+
+    <div class="cta-row">
+      <a class="btn" href="activities.html">Browse Activities</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Extracurriculars</p>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
