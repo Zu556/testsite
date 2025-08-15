@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Extracurriculars • About</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a class="logo" href="index.html">Extracurriculars</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="guide.html">Guide</a></li>
+      <li><a href="activities.html">Activities</a></li>
+      <li><a class="active" href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <h1>About Us</h1>
+    <section class="card block">
+      <p>We help students discover extracurricular activities that match their interests and goals. Our database aggregates opportunities across STEM, Arts, Leadership, Community, and Sports.</p>
+      <p>Built by students, for students — simple, fast, and free.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Extracurriculars</p>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
