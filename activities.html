@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Extracurriculars • Activities</title>
   <link rel="stylesheet" href="style.css" />
+
   <!-- Choices.js CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 </head>
 <body>
+  <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <a class="logo" href="index.html">Extracurriculars</a>
     <ul class="nav-links">
@@ -19,34 +21,60 @@
     </ul>
   </nav>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <main class="page">
     <h1>Find Activities</h1>
 
-    <input id="searchBar" class="search-bar" type="text" placeholder="Search activities, tags, locations…" aria-label="Search activities" />
+    <!-- Search -->
+    <input id="searchInput" 
+           class="search-bar" 
+           type="text" 
+           placeholder="🔍 Search activities, tags, or locations…" 
+           aria-label="Search activities" />
 
+    <!-- Filters -->
     <div class="filters">
-      <label for="ageFilter">Age:</label>
-      <select id="ageFilter" multiple></select>
-
-      <label for="typeFilter">Type:</label>
-      <select id="typeFilter" multiple></select>
-
       <label for="categoryFilter">Category:</label>
-      <select id="categoryFilter" multiple></select>
+      <select id="categoryFilter"></select>
 
-      <button id="clearFilters" class="btn btn-secondary">Clear All</button>
+      <label for="ageGroupFilter">Age Group:</label>
+      <select id="ageGroupFilter"></select>
+
+      <label for="locationFilter">Location:</label>
+      <select id="locationFilter"></select>
+
+      <label for="languageFilter">Language:</label>
+      <select id="languageFilter"></select>
+
+      <button id="clearFilters" class="btn">Clear All</button>
     </div>
 
+    <!-- Activity Grid -->
     <div id="activityGrid" class="activity-grid" role="list"></div>
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <p>© <span id="year"></span> Extracurriculars</p>
   </footer>
 
-  <!-- JS libs -->
+  <!-- JS Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-  <script src="activities.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="script.js"></script>
+  <script>
+    // Year auto-update
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Activate Choices.js dropdowns
+    document.querySelectorAll('select').forEach(select => {
+      new Choices(select, {
+        removeItemButton: true,
+        searchEnabled: false,
+        shouldSort: false,
+        placeholder: true,
+        placeholderValue: 'Select an option'
+      });
+    });
+  </script>
 </body>
 </html>
