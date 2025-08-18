@@ -1,136 +1,118 @@
-// ===== Activities Page Logic =====
-let ACTIVITIES = [];
-let ageChoices, typeChoices, categoryChoices;
+// script.js
 
-document.addEventListener('DOMContentLoaded', () => {
-  initChoices();
-  loadActivities();
-  document.getElementById('searchBar').addEventListener('input', filterActivities);
-  document.getElementById('clearFilters').addEventListener('click', clearAll);
-});
-
-function initChoices() {
-  ageChoices = new Choices('#ageFilter', {
-    removeItemButton: true, placeholder: true,
-    placeholderValue: 'Select Age Group', searchPlaceholderValue: 'Search…',
-    searchEnabled: true, shouldSort: false
-  });
-  typeChoices = new Choices('#typeFilter', {
-    removeItemButton: true, placeholder: true,
-    placeholderValue: 'Select Type', searchPlaceholderValue: 'Search…',
-    searchEnabled: true, shouldSort: false
-  });
-  categoryChoices = new Choices('#categoryFilter', {
-    removeItemButton: true, placeholder: true,
-    placeholderValue: 'Select Category', searchPlaceholderValue: 'Search…',
-    searchEnabled: true, shouldSort: false
-  });
-
-  // Re-filter whenever any dropdown changes
-  [ageChoices, typeChoices, categoryChoices].forEach(ch =>
-    ch.passedElement.element.addEventListener('change', filterActivities)
-  );
+// Load JSON dataset directly from GitHub
+async function loadData() {
+  const response = await fetch("https://raw.githubusercontent.com/YourUsername/YourRepo/main/activites.json");
+  const data = await response.json();
+  return data;
 }
 
-async function loadActivities() {
-  try {
-    const res = await fetch('activities.json'); // put activities.json in the same folder
-    ACTIVITIES = await res.json();
-    buildFilterOptions(ACTIVITIES);
-    renderActivities(ACTIVITIES);
-  } catch (e) {
-    console.error('Could not load activities.json', e);
-  }
-}
+// Render filter options dynamically
+function populateFilters(data) {
+  const categories = [...new Set(data.map(item => item.Category).filter(Boolean))];
+  const ageGroups = [...new Set(data.map(item => item.AgeGroup).filter(Boolean))];
+  const locations = [...new Set(data.map(item => item.Location).filter(Boolean))];
+  const languages = [...new Set(data.map(item => item.Language).filter(Boolean))];
 
-function uniqueVals(list, key) {
-  return [...new Set(list.map(x => (x[key] || '').toString().trim()).filter(Boolean))].sort();
-}
+  const categorySelect = document.getElementById("categoryFilter");
+  const ageGroupSelect = document.getElementById("ageGroupFilter");
+  const locationSelect = document.getElementById("locationFilter");
+  const languageSelect = document.getElementById("languageFilter");
 
-function buildFilterOptions(data) {
-  const ages = uniqueVals(data, 'age');
-  const types = uniqueVals(data, 'type');
-  const cats  = uniqueVals(data, 'category');
-
-  ageChoices.setChoices(ages.map(v => ({ value: v, label: v })), 'value', 'label', true);
-  typeChoices.setChoices(types.map(v => ({ value: v, label: v })), 'value', 'label', true);
-  categoryChoices.setChoices(cats.map(v => ({ value: v, label: v })), 'value', 'label', true);
-}
-
-function currentSelections() {
-  const searchTerm = document.getElementById('searchBar').value.trim().toLowerCase();
-  const ages = ageChoices.getValue(true);
-  const types = typeChoices.getValue(true);
-  const cats  = categoryChoices.getValue(true);
-  return { searchTerm, ages, types, cats };
-}
-
-function filterActivities() {
-  const { searchTerm, ages, types, cats } = currentSelections();
-
-  const list = ACTIVITIES.filter(a => {
-    // Combine fields for text search
-    const hay = [
-      a.name, a.description, a.type, a.category, a.age, a.location, a.tags
-    ].join(' ').toLowerCase();
-
-    const passSearch = searchTerm ? hay.includes(searchTerm) : true;
-
-    const inAges  = !ages.length  || ages.some(v  => (a.age || '').includes(v));
-    const inTypes = !types.length || types.some(v => (a.type || '').includes(v));
-    const inCats  = !cats.length  || cats.some(v  => (a.category || '').includes(v));
-
-    return passSearch && inAges && inTypes && inCats;
+  categories.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c;
+    option.textContent = c;
+    categorySelect.appendChild(option);
   });
 
-  renderActivities(list);
+  ageGroups.forEach(a => {
+    const option = document.createElement("option");
+    option.value = a;
+    option.textContent = a;
+    ageGroupSelect.appendChild(option);
+  });
+
+  locations.forEach(l => {
+    const option = document.createElement("option");
+    option.value = l;
+    option.textContent = l;
+    locationSelect.appendChild(option);
+  });
+
+  languages.forEach(l => {
+    const option = document.createElement("option");
+    option.value = l;
+    option.textContent = l;
+    languageSelect.appendChild(option);
+  });
 }
 
-function renderActivities(list) {
-  const grid = document.getElementById('activityGrid');
-  if (!list.length) {
-    grid.innerHTML = `<div class="activity-card"><p>No activities found. Try clearing filters.</p></div>`;
+// Render activity cards
+function renderActivities(data) {
+  const grid = document.getElementById("activityGrid");
+  grid.innerHTML = "";
+
+  if (data.length === 0) {
+    grid.innerHTML = "<p>No activities match your filters.</p>";
     return;
   }
 
-  grid.innerHTML = list.map(item => {
-    const tags = (item.tags || '')
-      .toString()
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean)
-      .map(t => `<span class="tag">${t}</span>`)
-      .join('');
+  data.forEach(item => {
+    const card = document.createElement("div");
+    card.classList.add("activity-card");
 
-    return `
-      <article class="activity-card" role="listitem">
-        <h3>${escapeHtml(item.name || 'Untitled')}</h3>
-        ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}
-        <div class="kv">
-          <div><strong>Age:</strong> ${escapeHtml(item.age || '—')}</div>
-          <div><strong>Type:</strong> ${escapeHtml(item.type || '—')}</div>
-          <div><strong>Category:</strong> ${escapeHtml(item.category || '—')}</div>
-        </div>
-        ${tags ? `<div class="tags">${tags}</div>` : ''}
-        <div class="card-actions">
-          ${item.link ? `<a class="btn" href="${escapeAttr(item.link)}" target="_blank" rel="noopener">Learn more</a>` : ''}
-        </div>
-      </article>
+    card.innerHTML = `
+      <h3>${item.Title}</h3>
+      <p><strong>Category:</strong> ${item.Category}</p>
+      <p><strong>Age Group:</strong> ${item.AgeGroup}</p>
+      <p><strong>Language:</strong> ${item.Language}</p>
+      <p><strong>Location:</strong> ${item.Location}</p>
+      <p><strong>Description:</strong> ${item.Description}</p>
+      <p><strong>How to Apply:</strong> ${item.HowToApply}</p>
+      ${item.Link1 ? `<a href="${item.Link1}" target="_blank">More Info</a>` : ""}
+      ${item.Link2 ? `<a href="${item.Link2}" target="_blank">Extra Link</a>` : ""}
     `;
-  }).join('');
+
+    grid.appendChild(card);
+  });
 }
 
-function clearAll() {
-  document.getElementById('searchBar').value = '';
-  ageChoices.clearStore(); typeChoices.clearStore(); categoryChoices.clearStore();
-  buildFilterOptions(ACTIVITIES);
-  renderActivities(ACTIVITIES);
+// Apply filters
+function applyFilters(data) {
+  const category = document.getElementById("categoryFilter").value;
+  const ageGroup = document.getElementById("ageGroupFilter").value;
+  const location = document.getElementById("locationFilter").value;
+  const language = document.getElementById("languageFilter").value;
+  const search = document.getElementById("searchInput").value.toLowerCase();
+
+  const filtered = data.filter(item => {
+    return (
+      (category === "" || item.Category.includes(category)) &&
+      (ageGroup === "" || item.AgeGroup.includes(ageGroup)) &&
+      (location === "" || item.Location.includes(location)) &&
+      (language === "" || item.Language.includes(language)) &&
+      (search === "" ||
+        item.Title.toLowerCase().includes(search) ||
+        item.Description.toLowerCase().includes(search))
+    );
+  });
+
+  renderActivities(filtered);
 }
 
-// Basic escaping to avoid breaking HTML when rendering data
-function escapeHtml(str){
-  return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+// Initialize page
+async function init() {
+  const data = await loadData();
+
+  populateFilters(data);
+  renderActivities(data);
+
+  document.getElementById("categoryFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("ageGroupFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("locationFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("languageFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
 }
-function escapeAttr(str){
-  return String(str).replace(/"/g,'&quot;');
-}
+
+init();
