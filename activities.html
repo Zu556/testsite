@@ -64,14 +64,6 @@
     // Year auto-update
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Activate Choices.js dropdowns
-    document.querySelectorAll('select').forEach(select => {
-      new Choices(select, {
-        removeItemButton: true,
-        searchEnabled: false,
-        shouldSort: false,
-        placeholder: true,
-        placeholderValue: 'Select an option'
       });
     });
   </script>
