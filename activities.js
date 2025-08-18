@@ -174,6 +174,20 @@ async function init() {
     document.getElementById(id).addEventListener("change", () => applyFilters(data));
   });
   document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
+  
+  // 5) ✅ Clear filters button
+  document.getElementById("clearFilters").addEventListener("click", () => {
+    document.getElementById("categoryFilter").value = "";
+    document.getElementById("ageGroupFilter").value = "";
+    document.getElementById("locationFilter").value = "";
+    document.getElementById("languageFilter").value = "";
+    document.getElementById("searchInput").value = "";
+
+    // reset Choices UI too
+    Object.values(choicesInstances).forEach(instance => instance.removeActiveItems());
+
+    // re-render all
+    applyFilters(data);
 }
 
 document.addEventListener("DOMContentLoaded", init);
