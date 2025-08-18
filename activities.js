@@ -169,26 +169,27 @@ async function init() {
   // 3) Render all cards initially
   renderActivities(data);
 
-  // 4) Wire events
+  // 4) Wire change events for filters
   ["categoryFilter","ageGroupFilter","locationFilter","languageFilter"].forEach(id => {
     document.getElementById(id).addEventListener("change", () => applyFilters(data));
   });
   document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
 
-  // 5) ✅ Clear filters button
+  // 5) Clear filters button
   document.getElementById("clearFilters").addEventListener("click", () => {
-    document.getElementById("categoryFilter").value = "";
-    document.getElementById("ageGroupFilter").value = "";
-    document.getElementById("locationFilter").value = "";
-    document.getElementById("languageFilter").value = "";
+    // Reset search input
     document.getElementById("searchInput").value = "";
 
-    // reset Choices UI too
-    Object.values(choicesInstances).forEach(instance => instance.removeActiveItems());
+    // Reset all dropdowns using Choices API
+    Object.values(choicesInstances).forEach(instance => {
+      instance.removeActiveItems();      // clears selected values
+      instance.setChoiceByValue("");     // reset to placeholder
+    });
 
-    // re-render all
-    applyFilters(data);
+    // Re-render all activities
+    renderActivities(data);
   });
 }
 
+// Initialize when DOM is ready
 document.addEventListener("DOMContentLoaded", init);
