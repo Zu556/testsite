@@ -174,7 +174,7 @@ async function init() {
     document.getElementById(id).addEventListener("change", () => applyFilters(data));
   });
   document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
-  
+
   // 5) ✅ Clear filters button
   document.getElementById("clearFilters").addEventListener("click", () => {
     document.getElementById("categoryFilter").value = "";
@@ -188,6 +188,6 @@ async function init() {
 
     // re-render all
     applyFilters(data);
+  });
 }
-
 document.addEventListener("DOMContentLoaded", init);
