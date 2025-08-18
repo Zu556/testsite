@@ -190,4 +190,5 @@ async function init() {
     applyFilters(data);
   });
 }
+
 document.addEventListener("DOMContentLoaded", init);
