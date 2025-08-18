@@ -9,15 +9,15 @@ async function loadData() {
 
 // Render filter options dynamically
 function populateFilters(data) {
-  const categories = [...new Set(data.map(item => item.Category).filter(Boolean))];
-  const ageGroups = [...new Set(data.map(item => item.AgeGroup).filter(Boolean))];
-  const locations = [...new Set(data.map(item => item.Location).filter(Boolean))];
-  const languages = [...new Set(data.map(item => item.Language).filter(Boolean))];
+  const categories = [...new Set(data.map(item => item.Category?.trim()).filter(Boolean))];
+  const ageGroups = [...new Set(data.map(item => item.AgeGroup?.trim()).filter(Boolean))];
+  const locations = [...new Set(data.map(item => item.Location?.trim()).filter(Boolean))];
+  const languages = [...new Set(data.map(item => item.Language?.trim()).filter(Boolean))];
 
-  const categorySelect = document.getElementById("CategoryFilter");
-  const ageGroupSelect = document.getElementById("AgeGroupFilter");
-  const locationSelect = document.getElementById("LocationFilter");
-  const languageSelect = document.getElementById("LanguageFilter");
+  const categorySelect = document.getElementById("categoryFilter");
+  const ageGroupSelect = document.getElementById("ageGroupFilter");
+  const locationSelect = document.getElementById("locationFilter");
+  const languageSelect = document.getElementById("languageFilter");
 
   categories.forEach(c => {
     const option = document.createElement("option");
