@@ -1,4 +1,4 @@
-// script.js
+// activities.js
 
 // Load JSON dataset directly from GitHub
 async function loadData() {
