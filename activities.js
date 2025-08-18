@@ -1,59 +1,47 @@
 // activities.js
 
-// Load JSON dataset directly from GitHub
 async function loadData() {
   const response = await fetch("https://zu556.github.io/testsite/activities.json");
   const data = await response.json();
   return data;
 }
 
-// Render filter options dynamically
 function populateFilters(data) {
-  const categories = [...new Set(data.map(item => item.Category?.trim()).filter(Boolean))];
-  const ageGroups = [...new Set(data.map(item => item.AgeGroup?.trim()).filter(Boolean))];
-  const locations = [...new Set(data.map(item => item.Location?.trim()).filter(Boolean))];
-  const languages = [...new Set(data.map(item => item.Language?.trim()).filter(Boolean))];
-
   const categorySelect = document.getElementById("categoryFilter");
   const ageGroupSelect = document.getElementById("ageGroupFilter");
   const locationSelect = document.getElementById("locationFilter");
   const languageSelect = document.getElementById("languageFilter");
 
-  categories.forEach(c => {
-    const option = document.createElement("option");
-    option.value = c;
-    option.textContent = c;
-    categorySelect.appendChild(option);
-  });
+  // Create a helper to populate a select
+  function addOptions(select, values) {
+    select.innerHTML = '<option value="">All</option>'; // default option
+    values.forEach(v => {
+      if (v) { // skip empty/null
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = v;
+        select.appendChild(option);
+      }
+    });
+  }
 
-  ageGroups.forEach(a => {
-    const option = document.createElement("option");
-    option.value = a;
-    option.textContent = a;
-    ageGroupSelect.appendChild(option);
-  });
+  // Extract unique values from JSON
+  const categories = [...new Set(data.map(item => item.Category))];
+  const ageGroups = [...new Set(data.map(item => item.AgeGroup))];
+  const locations = [...new Set(data.map(item => item.Location))];
+  const languages = [...new Set(data.map(item => item.Language))];
 
-  locations.forEach(l => {
-    const option = document.createElement("option");
-    option.value = l;
-    option.textContent = l;
-    locationSelect.appendChild(option);
-  });
-
-  languages.forEach(l => {
-    const option = document.createElement("option");
-    option.value = l;
-    option.textContent = l;
-    languageSelect.appendChild(option);
-  });
+  addOptions(categorySelect, categories);
+  addOptions(ageGroupSelect, ageGroups);
+  addOptions(locationSelect, locations);
+  addOptions(languageSelect, languages);
 }
 
-// Render activity cards
 function renderActivities(data) {
   const grid = document.getElementById("activityGrid");
   grid.innerHTML = "";
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     grid.innerHTML = "<p>No activities match your filters.</p>";
     return;
   }
@@ -78,55 +66,39 @@ function renderActivities(data) {
   });
 }
 
-// Apply filters
 function applyFilters(data) {
   const category = document.getElementById("categoryFilter").value;
   const ageGroup = document.getElementById("ageGroupFilter").value;
   const location = document.getElementById("locationFilter").value;
   const language = document.getElementById("languageFilter").value;
-  const search = document.getElementById("searchInput").value.trim().toLowerCase();
+  const search = document.getElementById("searchInput").value.toLowerCase();
 
   const filtered = data.filter(item => {
     return (
-      (category === "" || item.Category.includes(category)) &&
-      (ageGroup === "" || item.AgeGroup.includes(ageGroup)) &&
-      (location === "" || item.Location.includes(location)) &&
-      (language === "" || item.Language.includes(language)) &&
-      (search === "" ||
-        item.Title.toLowerCase().includes(search) ||
-        item.Description.toLowerCase().includes(search))
+      (!category || item.Category === category) &&
+      (!ageGroup || item.AgeGroup === ageGroup) &&
+      (!location || item.Location === location) &&
+      (!language || item.Language === language) &&
+      (!search ||
+        (item.Title && item.Title.toLowerCase().includes(search)) ||
+        (item.Description && item.Description.toLowerCase().includes(search)))
     );
   });
 
   renderActivities(filtered);
 }
 
-// Initialize page
 async function init() {
   const data = await loadData();
 
   populateFilters(data);
   renderActivities(data);
 
-  // Add event listeners
-  ["categoryFilter", "ageGroupFilter", "locationFilter", "languageFilter"].forEach(id => {
-    document.getElementById(id).addEventListener("change", () => applyFilters(data));
-  });
+  document.getElementById("categoryFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("ageGroupFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("locationFilter").addEventListener("change", () => applyFilters(data));
+  document.getElementById("languageFilter").addEventListener("change", () => applyFilters(data));
   document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
-
-  // Clear All Filters button logic
-  const clearBtn = document.getElementById("clearFilters");
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      document.getElementById("searchInput").value = "";
-      ["categoryFilter", "ageGroupFilter", "locationFilter", "languageFilter"].forEach(id => {
-        const select = document.getElementById(id);
-        select.value = "";
-        if (select.choices) select.choices.clearStore(); // Works if using Choices.js
-      });
-      renderActivities(data);
-    });
-  }
 }
 
 init();
