@@ -84,7 +84,7 @@ function applyFilters(data) {
   const ageGroup = document.getElementById("ageGroupFilter").value;
   const location = document.getElementById("locationFilter").value;
   const language = document.getElementById("languageFilter").value;
-  const search = document.getElementById("searchInput").value.toLowerCase();
+  const search = document.getElementById("searchInput").value.trim().toLowerCase();
 
   const filtered = data.filter(item => {
     return (
@@ -108,11 +108,25 @@ async function init() {
   populateFilters(data);
   renderActivities(data);
 
-  document.getElementById("categoryFilter").addEventListener("change", () => applyFilters(data));
-  document.getElementById("ageGroupFilter").addEventListener("change", () => applyFilters(data));
-  document.getElementById("locationFilter").addEventListener("change", () => applyFilters(data));
-  document.getElementById("languageFilter").addEventListener("change", () => applyFilters(data));
+  // Add event listeners
+  ["categoryFilter", "ageGroupFilter", "locationFilter", "languageFilter"].forEach(id => {
+    document.getElementById(id).addEventListener("change", () => applyFilters(data));
+  });
   document.getElementById("searchInput").addEventListener("input", () => applyFilters(data));
+
+  // Clear All Filters button logic
+  const clearBtn = document.getElementById("clearFilters");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      document.getElementById("searchInput").value = "";
+      ["categoryFilter", "ageGroupFilter", "locationFilter", "languageFilter"].forEach(id => {
+        const select = document.getElementById(id);
+        select.value = "";
+        if (select.choices) select.choices.clearStore(); // Works if using Choices.js
+      });
+      renderActivities(data);
+    });
+  }
 }
 
 init();
