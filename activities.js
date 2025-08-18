@@ -2,7 +2,7 @@
 
 // Load JSON dataset directly from GitHub
 async function loadData() {
-  const response = await fetch("https://raw.githubusercontent.com/Zu556/testsite/main/activities.json");
+  const response = await fetch("activities.json");
   const data = await response.json();
   return data;
 }
