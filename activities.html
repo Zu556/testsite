@@ -58,13 +58,13 @@
     <p>© <span id="year"></span> Extracurriculars</p>
   </footer>
 
-  <!-- JS Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <!-- ===== JS ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js" defer></script>
+  <script src="activities.js" defer></script>
   <script>
     // Year auto-update
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-      });
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
     });
   </script>
 </body>
