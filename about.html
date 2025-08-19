@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- NAV -->
+  <!-- Navbar -->
   <nav class="navbar">
     <a class="logo" href="index.html">Extracurriculars</a>
     <ul class="nav-links">
@@ -18,44 +18,91 @@
     </ul>
   </nav>
 
-  <!-- MAIN -->
   <main class="page">
-    <!-- Hero Heading -->
-    <h1 class="fade-up">About Us</h1>
+    <!-- About Hero -->
+    <section class="about-hero fade-up">
+      <h1>About Us</h1>
+      <p class="subtext">Built by students, for students — helping you find opportunities that match your passions.</p>
+    </section>
 
-    <!-- Intro Section -->
-    <section class="card block fade-up">
-      <p>We help students discover extracurricular activities that match their interests and goals. Our database aggregates opportunities across STEM, Arts, Leadership, Community, and Sports.</p>
-      <p>Built by students, for students — simple, fast, and free.</p>
+    <!-- Two Column (Mission & Vision) -->
+    <section class="two-col fade-up">
+      <div class="card">
+        <h2>Our Mission</h2>
+        <p>We help students discover extracurricular activities that align with their goals, from STEM to Arts, Sports, and Leadership.</p>
+      </div>
+      <div class="card">
+        <h2>Our Vision</h2>
+        <p>A world where every student can easily access opportunities to grow, explore, and lead — beyond the classroom.</p>
+      </div>
+    </section>
+
+    <!-- Values Grid -->
+    <section class="values-grid fade-up">
+      <h2>Our Values</h2>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <h3>Accessibility</h3>
+          <p>Free and easy access for every student.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Diversity</h3>
+          <p>Activities across STEM, Arts, Sports, Leadership, and more.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Community</h3>
+          <p>Built by students, for students — we grow together.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline fade-up">
+      <h2>Our Journey</h2>
+      <ul class="timeline-list">
+        <li>
+          <div class="timeline-year">2022</div>
+          <div class="timeline-content">
+            <h3>Started the Project</h3>
+            <p>Created as a student initiative to make extracurriculars more accessible.</p>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-year">2023</div>
+          <div class="timeline-content">
+            <h3>Expanded Database</h3>
+            <p>Now featuring 100+ opportunities across multiple categories.</p>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-year">2024</div>
+          <div class="timeline-content">
+            <h3>Community Growth</h3>
+            <p>Partnered with schools and organizations to help thousands of students.</p>
+          </div>
+        </li>
+      </ul>
     </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer class="footer">
     <p>© <span id="year"></span> Extracurriculars</p>
   </footer>
 
-  <!-- Year auto update -->
+  <!-- Script: Year + Fade-up Animation -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-
-  <!-- Fade-up Animation -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const faders = document.querySelectorAll(".fade-up");
-
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-
-      faders.forEach(el => observer.observe(el));
-    });
+    const elements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    elements.forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
