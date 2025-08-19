@@ -157,7 +157,7 @@ body{
   .filters .choices{width:100%;}
   #searchInput{width:100%; margin-top:0.5rem;}
 }
-
+/* ===== about.html===== */
 /* ===== ABOUT HERO ===== */
 .about-hero {
   background: linear-gradient(135deg, var(--navy-2), var(--bg));
