@@ -53,7 +53,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     
-    onst elements = document.querySelectorAll('.fade-up');
+    const elements = document.querySelectorAll('.fade-up');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
