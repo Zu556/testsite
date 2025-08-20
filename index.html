@@ -52,6 +52,7 @@
   </footer>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+    
     onst elements = document.querySelectorAll('.fade-up');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -61,6 +62,7 @@
         }
       });
     }, { threshold: 0.1 });
+    
     elements.forEach(el => observer.observe(el));
   </script>
 </body>
